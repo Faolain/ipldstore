@@ -109,7 +109,8 @@ def read_car(stream_or_bytes: StreamLike) -> Tuple[List[CID], Iterator[Tuple[CID
     roots, header_size = decode_car_header(stream)
     def blocks() -> Iterator[Tuple[CID, bytes, CARBlockLocation]]:
         offset = header_size
-        while (next_block := decode_raw_car_block(stream)) is not None:
+        next_block = decode_raw_car_block(stream)
+        while next_block is not None:
             cid, data, sizes = next_block
             yield cid, data, dataclasses.replace(sizes, offset=offset)
             offset += sizes.size
